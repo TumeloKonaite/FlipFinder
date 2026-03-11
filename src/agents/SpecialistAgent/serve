@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd /opt/program
+exec gunicorn --bind 0.0.0.0:8080 --workers 1 --timeout 1800 serve:app

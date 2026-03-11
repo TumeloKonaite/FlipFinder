@@ -1,0 +1,15 @@
+FROM public.ecr.aws/lambda/python:3.11
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+COPY requirements.lambda.txt .
+RUN pip install --no-cache-dir --only-binary=:all: -r requirements.lambda.txt --target "${LAMBDA_TASK_ROOT}" && \
+    pip install --no-cache-dir --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.3.1 --target "${LAMBDA_TASK_ROOT}"
+
+COPY deep_neural_network.py "${LAMBDA_TASK_ROOT}/"
+COPY deep_neural_network_model.bin "${LAMBDA_TASK_ROOT}/"
+COPY inference_service.py "${LAMBDA_TASK_ROOT}/"
+COPY lambda_handler.py "${LAMBDA_TASK_ROOT}/"
+
+CMD ["lambda_handler.lambda_handler"]

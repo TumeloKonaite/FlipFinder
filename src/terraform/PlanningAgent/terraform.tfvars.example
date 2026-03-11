@@ -1,0 +1,18 @@
+aws_region                = "us-east-1"
+project_name              = "planning-agent"
+lambda_function_name      = "planning-agent-orchestrator"
+lambda_timeout            = 180
+lambda_memory_size        = 1024
+scanner_lambda_name       = "scanner-agent-runner"
+scanner_lambda_arn        = "arn:aws:lambda:us-east-1:123456789012:function:scanner-agent-runner"
+ensemble_lambda_name      = "pricing-ensemble-orchestrator"
+ensemble_lambda_arn       = "arn:aws:lambda:us-east-1:123456789012:function:pricing-ensemble-orchestrator"
+messaging_sns_topic_name  = "deal-alerts"
+messaging_email_endpoint  = "you@example.com"
+messaging_bedrock_region  = "us-east-1"
+messaging_bedrock_model_id = "amazon.nova-micro-v1:0"
+
+tags = {
+  Project = "ECommerceArbitrage"
+  Stack   = "PlanningAgent"
+}

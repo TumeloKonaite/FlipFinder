@@ -1,0 +1,4 @@
+pydantic>=2.12.5
+beautifulsoup4>=4.12.3
+requests>=2.32.3
+tqdm>=4.67.3

@@ -1,0 +1,27 @@
+aws_region = "us-east-1"
+
+project_name            = "pricer-service"
+image_tag               = "latest"
+sagemaker_endpoint_name = "pricer-endpoint"
+lambda_function_name    = "pricer-service-wrapper"
+
+instance_type          = "ml.g5.xlarge"
+initial_instance_count = 1
+
+base_model      = "Qwen/Qwen2.5-3B-Instruct"
+finetuned_model = "TumeloKonaite/<your-price-model-repo>"
+model_revision  = ""
+
+huggingface_api_token = ""
+
+question       = "What does this cost to the nearest dollar?"
+prefix         = "Price is $"
+max_new_tokens = 5
+seed           = 42
+
+lambda_source_file = "../../agents/SpecialistAgent/pricer_service.py"
+
+tags = {
+  Project     = "pricer-service"
+  Environment = "dev"
+}

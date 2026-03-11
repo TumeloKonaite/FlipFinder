@@ -1,0 +1,30 @@
+# Part 2: SageMaker Configuration
+# Copy this file to terraform.tfvars and update with your values
+
+# Your AWS region for SageMaker
+# Should match your DEFAULT_AWS_REGION from .env
+aws_region = "us-east-1"
+
+project_name = "embedding-service"
+image_tag    = "v2"
+
+# Must be globally unique across all AWS accounts
+product_data_bucket_name = "my-product-data-<account-id>"
+
+embedding_endpoint_names = [
+  "flipfinder-embedding-endpoint",
+  "flipfinder-embedding-endpoint-2",
+  "flipfinder-embedding-endpoint-3",
+]
+
+embedding_model_name = "sentence-transformers/all-MiniLM-L6-v2"
+normalize_embeddings = true
+embedding_batch_size = 32
+
+endpoint_memory_size_in_mb = 3072
+endpoint_max_concurrency   = 2
+
+tags = {
+  Project = "e-commerce-arbitrage"
+  Stack   = "FrontierAgent"
+}

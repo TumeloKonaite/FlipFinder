@@ -1,0 +1,26 @@
+[project]
+name = "e-commerce-arbitrage"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.40.29",
+    "datasets==3.6.0",
+    "fsspec==2024.12.0",
+    "groq>=1.0.0",
+    "huggingface-hub>=1.5.0",
+    "ipywidgets>=8.1.8",
+    "litellm>=1.79.0",
+    "matplotlib>=3.10.8",
+    "nbformat>=5.10.4",
+    "numpy>=2.4.2",
+    "openai>=2.24.0",
+    "openai-agents>=0.2.0",
+    "plotly>=6.6.0",
+    "pydantic>=2.12.5",
+    "python-dotenv>=1.2.2",
+    "scikit-learn>=1.8.0",
+    "torch>=2.10.0",
+    "tqdm>=4.67.3",
+]

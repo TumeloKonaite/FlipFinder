@@ -1,0 +1,16 @@
+aws_region           = "us-east-1"
+lambda_function_name = "frontier-agent-pricer"
+
+openai_api_key         = ""
+openai_api_key_secret_arn = ""
+openai_api_key_ssm_parameter_name = ""
+frontier_model         = "gpt-5.1"
+frontier_vector_bucket = "products-vectors-194722416872"
+frontier_index_name    = "products"
+embedding_endpoint_name = "flipfinder-embedding-endpoint"
+frontier_top_k         = 5
+python_executable      = "python"
+
+tags = {
+  Stack = "FrontierAgent"
+}

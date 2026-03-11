@@ -1,0 +1,16 @@
+aws_region                  = "us-east-1"
+project_name                = "scanner-agent"
+lambda_function_name        = "scanner-agent-runner"
+lambda_timeout              = 180
+lambda_memory_size          = 1024
+# Leave null unless you explicitly need to pin scanner concurrency.
+lambda_reserved_concurrency = null
+scanner_schedule_expression = "rate(30 minutes)"
+scanner_memory_table_name   = "scanner-agent-memory"
+scanner_memory_max_items    = 500
+openai_api_key_secret_arn   = "arn:aws:secretsmanager:us-east-1:123456789012:secret:scanner-agent/openai-api-key"
+
+tags = {
+  Project = "ECommerceArbitrage"
+  Stack   = "ScannerAgent"
+}

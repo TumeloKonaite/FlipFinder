@@ -1,0 +1,19 @@
+aws_region           = "us-east-1"
+lambda_function_name = "ensemble-agent-orchestrator"
+
+frontier_lambda_name   = "frontier-agent-pricer"
+frontier_lambda_arn    = "arn:aws:lambda:us-east-1:123456789012:function:frontier-agent-pricer"
+specialist_lambda_name = "pricer-service-wrapper"
+specialist_lambda_arn  = "arn:aws:lambda:us-east-1:123456789012:function:pricer-service-wrapper"
+nn_lambda_name         = "nn-agent-pricer"
+nn_lambda_arn          = "arn:aws:lambda:us-east-1:123456789012:function:nn-agent-pricer"
+
+preprocessor_model        = "bedrock/converse/openai.gpt-oss-120b-1:0"
+ensemble_weight_frontier  = 0.8
+ensemble_weight_specialist = 0.1
+ensemble_weight_nn        = 0.1
+python_executable         = "python"
+
+tags = {
+  Stack = "EnsembleAgent"
+}

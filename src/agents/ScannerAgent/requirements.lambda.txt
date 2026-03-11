@@ -1,0 +1,5 @@
+beautifulsoup4>=4.12.3
+openai>=2.24.0
+pydantic>=2.12.5
+requests>=2.32.3
+tqdm>=4.67.3

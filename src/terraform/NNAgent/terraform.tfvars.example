@@ -1,0 +1,12 @@
+aws_region           = "us-east-1"
+project_name         = "nn-agent"
+lambda_function_name = "nn-agent-pricer"
+image_tag            = "latest"
+
+lambda_timeout     = 120
+lambda_memory_size = 6144
+
+tags = {
+  Project     = "nn-agent"
+  Environment = "dev"
+}

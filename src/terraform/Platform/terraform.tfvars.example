@@ -1,0 +1,36 @@
+aws_region     = "us-east-1"
+project_prefix = "pricing"
+
+specialist_base_model      = "Qwen/Qwen2.5-3B-Instruct"
+specialist_finetuned_model = "TumeloKonaite/<your-price-model-repo>"
+specialist_model_revision  = ""
+
+openai_api_key                    = ""
+openai_api_key_secret_arn         = ""
+openai_api_key_ssm_parameter_name = ""
+huggingface_api_token             = ""
+
+python_executable  = "python"
+docker_executable  = "docker"
+aws_cli_executable = "aws"
+docker_platform    = "linux/amd64"
+auto_build_container_images = true
+
+embedding_product_data_bucket_name          = ""
+embedding_product_data_bucket_force_destroy = true
+embedding_endpoint_names                    = ["flipfinder-embedding-endpoint"]
+embedding_endpoint_memory_size_in_mb        = 3072
+
+frontier_vector_bucket = "products-vectors-194722416872"
+frontier_index_name    = "products"
+
+scanner_schedule_expression = "rate(30 minutes)"
+messaging_email_endpoint    = "you@example.com"
+messaging_bedrock_model_id  = "amazon.nova-micro-v1:0"
+
+preprocessor_model = "bedrock/converse/openai.gpt-oss-120b-1:0"
+
+tags = {
+  Environment = "dev"
+  Project     = "pricing-platform"
+}

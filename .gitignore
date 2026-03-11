@@ -1,0 +1,33 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+.env
+
+# Local env variants and key material
+.env.*
+*.pem
+*.key
+
+# Terraform local state and sensitive vars
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraform/
+
+# Generated terraform/package artifacts
+src/terraform/**/lambda/*.zip
+src/terraform/**/planning-build-*/
+src/terraform/**/payload*.json
+src/terraform/**/response*.json
+src/terraform/**/output.json
+
+# Large local model artifact
+src/agents/NNAgent/deep_neural_network_model.bin

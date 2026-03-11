@@ -1,0 +1,9 @@
+flask==3.0.3
+gunicorn==22.0.0
+torch==2.4.0
+transformers==4.57.1
+accelerate==1.0.1
+peft==0.18.1
+bitsandbytes==0.44.1
+huggingface_hub==0.35.3
+safetensors==0.4.5
