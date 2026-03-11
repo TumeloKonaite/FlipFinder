@@ -24,13 +24,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt pytest
 
+      - name: Run tests first
+        run: pytest -q tests
+
       - name: Basic import/compile check
         run: python -m compileall src
-
-      - name: Run tests (if any)
-        run: |
-          if [ -d tests ] && find tests -type f -name "test_*.py" | grep -q .; then
-            pytest -q tests
-          else
-            echo "No pytest tests found under ./tests, skipping."
-          fi
