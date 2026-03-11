@@ -45,6 +45,7 @@ resource "terraform_data" "build_nn_image" {
       aws_ecr_repository.nn_agent.repository_url,
       var.image_tag,
       var.docker_platform,
+      var.nn_weights_drive_folder_url,
     ],
     [
       for rel_path in local.image_source_files :
@@ -57,6 +58,7 @@ resource "terraform_data" "build_nn_image" {
       aws_ecr_repository.nn_agent.repository_url,
       var.image_tag,
       var.docker_platform,
+      var.nn_weights_drive_folder_url,
     ],
     [
       for rel_path in local.image_source_files :
@@ -68,7 +70,7 @@ resource "terraform_data" "build_nn_image" {
     command     = <<-EOT
       $ErrorActionPreference = "Stop"
       cmd /c "${var.aws_cli_executable} ecr get-login-password --region ${var.aws_region} | ${var.docker_executable} login --username AWS --password-stdin ${split("/", aws_ecr_repository.nn_agent.repository_url)[0]}"
-      ${var.docker_executable} buildx build --platform ${var.docker_platform} --provenance=false --push -f "${local.image_dockerfile}" -t "${aws_ecr_repository.nn_agent.repository_url}:${var.image_tag}" "${local.image_context_dir}"
+      ${var.docker_executable} buildx build --platform ${var.docker_platform} --provenance=false --push --build-arg NN_WEIGHTS_DRIVE_FOLDER_URL="${var.nn_weights_drive_folder_url}" -f "${local.image_dockerfile}" -t "${aws_ecr_repository.nn_agent.repository_url}:${var.image_tag}" "${local.image_context_dir}"
     EOT
     interpreter = ["PowerShell", "-Command"]
   }

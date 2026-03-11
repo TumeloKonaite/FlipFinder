@@ -53,6 +53,11 @@ variable "auto_build_image" {
   default = true
 }
 
+variable "nn_weights_drive_folder_url" {
+  type    = string
+  default = "https://drive.google.com/drive/folders/1uq5C9edPIZ1973dArZiEO-VE13F7m8MK?usp=drive_link"
+}
+
 variable "tags" {
   type    = map(string)
   default = {}

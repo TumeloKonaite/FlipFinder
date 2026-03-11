@@ -24,5 +24,6 @@ output "setup_instructions" {
 
     Auto-build enabled: ${var.auto_build_image}
     Image: ${aws_ecr_repository.nn_agent.repository_url}:${var.image_tag}
+    NN weights source folder: ${var.nn_weights_drive_folder_url}
   EOT
 }

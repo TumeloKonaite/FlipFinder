@@ -98,6 +98,11 @@ variable "nn_lambda_memory_size" {
   default = 3008
 }
 
+variable "nn_weights_drive_folder_url" {
+  type    = string
+  default = "https://drive.google.com/drive/folders/1uq5C9edPIZ1973dArZiEO-VE13F7m8MK?usp=drive_link"
+}
+
 variable "specialist_image_tag" {
   type    = string
   default = "latest"

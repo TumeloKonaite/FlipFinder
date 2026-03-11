@@ -9,6 +9,7 @@ openai_api_key                    = ""
 openai_api_key_secret_arn         = ""
 openai_api_key_ssm_parameter_name = ""
 huggingface_api_token             = ""
+nn_weights_drive_folder_url       = "https://drive.google.com/drive/folders/1uq5C9edPIZ1973dArZiEO-VE13F7m8MK?usp=drive_link"
 
 python_executable  = "python"
 docker_executable  = "docker"

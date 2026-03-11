@@ -56,6 +56,7 @@ module "nn_agent" {
   image_tag             = var.nn_image_tag
   lambda_timeout        = var.nn_lambda_timeout
   lambda_memory_size    = var.nn_lambda_memory_size
+  nn_weights_drive_folder_url = var.nn_weights_drive_folder_url
   log_retention_in_days = var.log_retention_in_days
   docker_executable     = var.docker_executable
   aws_cli_executable    = var.aws_cli_executable

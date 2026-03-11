@@ -20,7 +20,7 @@ We'll deploy:
 - A CloudWatch log group for inference logs
 - Infrastructure as Code using Terraform
 
-The key difference from the Specialist Agent approach: this deployment does **not** use SageMaker. The trained model file `deep_neural_network_model.bin` is bundled directly into the Lambda image.
+The key difference from the Specialist Agent approach: this deployment does **not** use SageMaker. The NN weights are downloaded during Docker build and bundled into the Lambda image.
 
 ## Prerequisites
 
@@ -29,7 +29,8 @@ Before starting:
 - Have Terraform installed (version 1.5+)
 - Have Docker Desktop installed and running
 - Have AWS CLI configured and authenticated
-- Have the trained model file present at `src/agents/NNAgent/deep_neural_network_model.bin`
+- Have internet access to the NN weights folder:
+  `https://drive.google.com/drive/folders/1uq5C9edPIZ1973dArZiEO-VE13F7m8MK?usp=drive_link`
 
 ## Step 1: Configure Terraform Variables
 
@@ -59,6 +60,7 @@ image_tag            = "latest"
 
 lambda_timeout     = 120
 lambda_memory_size = 6144
+nn_weights_drive_folder_url = "https://drive.google.com/drive/folders/1uq5C9edPIZ1973dArZiEO-VE13F7m8MK?usp=drive_link"
 
 tags = {
   Project     = "nn-agent"
@@ -116,10 +118,10 @@ docker buildx build --platform linux/amd64 --provenance=false --push -f ../../ag
 
 This image includes:
 - `deep_neural_network.py`
-- `deep_neural_network_model.bin`
 - `inference_service.py`
 - `lambda_handler.py`
 - Python dependencies from `requirements.lambda.txt`
+- NN weights downloaded from the Google Drive folder and copied into the image as `deep_neural_network_model.bin`
 
 **Important**: use `--platform linux/amd64 --provenance=false` when pushing to Lambda. This avoids manifest issues and ensures the image matches the Lambda architecture configured by Terraform.
 
@@ -248,13 +250,10 @@ The model uses PyTorch and a fairly large hidden layer size, so memory pressure 
 ### Model File Missing
 
 If the logs suggest the model cannot be loaded, confirm that:
-- `src/agents/NNAgent/deep_neural_network_model.bin` exists locally before the Docker build
+- `nn_weights_drive_folder_url` points to a public Google Drive folder that contains a `.pth` file
+- your build environment can access Google Drive during `docker buildx build`
 - the Docker build context is `../../agents/NNAgent`
-- the Dockerfile still contains:
-
-```dockerfile
-COPY deep_neural_network_model.bin "${LAMBDA_TASK_ROOT}/"
-```
+- the Dockerfile still downloads from Drive and copies the discovered `.pth` file into Lambda task root as `deep_neural_network_model.bin`
 
 ### Docker Build Fails
 
