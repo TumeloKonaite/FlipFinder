@@ -1,6 +1,6 @@
 # Building FlipFinder: Part 2 - Specialist Agent SageMaker Deployment
 
-Welcome back! In this guide, we'll deploy the Specialist Agent as a custom SageMaker real-time endpoint backed by a Hugging Face base model plus a PEFT adapter. This is a critical component - it powers FlipFinder's pricing specialist and returns a predicted dollar value for a product description.
+In this guide, we'll deploy the Specialist Agent as a custom SageMaker real-time endpoint backed by a Hugging Face base model plus a PEFT adapter. This is a critical component - it powers FlipFinder's pricing specialist and returns a predicted dollar value for a product description.
 
 ## Architecture Overview
 

@@ -1,6 +1,6 @@
 # Building FlipFinder: Ensemble Agent Orchestrator Deployment
 
-Welcome back! In this guide, we'll deploy the Ensemble Agent as an AWS Lambda orchestrator. This is the layer that rewrites the product description, calls the Frontier, Specialist, and NN pricing agents in parallel, and combines their responses into a single predicted dollar value.
+In this guide, we'll deploy the Ensemble Agent as an AWS Lambda orchestrator. This is the layer that rewrites the product description, calls the Frontier, Specialist, and NN pricing agents in parallel, and combines their responses into a single predicted dollar value.
 
 ## Architecture Overview
 

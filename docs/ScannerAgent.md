@@ -1,6 +1,6 @@
 # Building FlipFinder: Scanner Agent Scheduled Lambda Deployment
 
-Welcome back! In this guide, we'll deploy the Scanner Agent as a scheduled AWS Lambda. This is the component that reads deals from RSS feeds, filters out items already seen in memory, asks OpenAI to select the most promising products with clear prices, and stores scanned results in DynamoDB for future runs.
+In this guide, we'll deploy the Scanner Agent as a scheduled AWS Lambda. This is the component that reads deals from RSS feeds, filters out items already seen in memory, asks OpenAI to select the most promising products with clear prices, and stores scanned results in DynamoDB for future runs.
 
 ## Architecture Overview
 

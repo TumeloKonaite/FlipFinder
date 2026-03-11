@@ -1,6 +1,6 @@
 # Building FlipFinder: NN Agent Lambda Container Deployment
 
-Welcome back! In this guide, we'll deploy the NN Agent as an AWS Lambda container image. This is the lightweight classical pricing component that loads a saved neural network model from the container image and returns a predicted dollar value for a product description.
+In this guide, we'll deploy the NN Agent as an AWS Lambda container image. This is the lightweight classical pricing component that loads a saved neural network model from the container image and returns a predicted dollar value for a product description.
 
 ## Architecture Overview
 

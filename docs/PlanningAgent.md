@@ -1,6 +1,6 @@
 # Building FlipFinder: Planning Agent Orchestrator Deployment
 
-Welcome back! In this guide, you'll deploy the Planning Agent as an AWS Lambda orchestrator. This is the workflow layer that pulls candidate deals from the Scanner Agent, prices them with the Ensemble Agent, calculates the discount, and sends an alert through the Messaging Agent when the best opportunity clears the planner threshold.
+In this guide, you'll deploy the Planning Agent as an AWS Lambda orchestrator. This is the workflow layer that pulls candidate deals from the Scanner Agent, prices them with the Ensemble Agent, calculates the discount, and sends an alert through the Messaging Agent when the best opportunity clears the planner threshold.
 
 ## Architecture Overview
 

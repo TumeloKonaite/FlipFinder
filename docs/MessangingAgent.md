@@ -1,6 +1,6 @@
 # Building FlipFinder: Messaging Agent Notification Setup
 
-Welcome back! In this guide, we'll configure the Messaging Agent that sends deal alerts for FlipFinder. In the current repo, the Messaging Agent is not deployed as a standalone Lambda. It is packaged inside the `PlanningAgent` deployment, where it drafts deal notifications with Bedrock and sends them through Amazon SNS email.
+In this guide, we'll configure the Messaging Agent that sends deal alerts for FlipFinder. In the current repo, the Messaging Agent is not deployed as a standalone Lambda. It is packaged inside the `PlanningAgent` deployment, where it drafts deal notifications with Bedrock and sends them through Amazon SNS email.
 
 ## Architecture Overview
 

@@ -1,6 +1,6 @@
 # Building FlipFinder: Frontier Agent Lambda Deployment
 
-Welcome back! In this guide, we'll deploy the Frontier Agent as an AWS Lambda pricing service. This agent uses retrieval-augmented generation: it embeds the incoming description with a SageMaker embedding endpoint, queries S3 Vectors for similar products, and asks an OpenAI model to estimate a price.
+In this guide, we'll deploy the Frontier Agent as an AWS Lambda pricing service. This agent uses retrieval-augmented generation: it embeds the incoming description with a SageMaker embedding endpoint, queries S3 Vectors for similar products, and asks an OpenAI model to estimate a price.
 
 ## Architecture Overview
 
