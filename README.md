@@ -112,7 +112,7 @@ At minimum set:
 - `huggingface_api_token` if base/fine-tuned model repos are gated
 
 Important defaults in example:
-- `nn_weights_drive_folder_url` points to your Week 6 Google Drive folder
+- `nn_weights_drive_folder_url` points to your Google Drive Folder
 - `auto_build_container_images = true`
 
 If you already have a populated vector index, set:
