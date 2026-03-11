@@ -1,5 +1,7 @@
 # FlipFinder
 
+[![CI](https://github.com/TumeloKonaite/FlipFinder/actions/workflows/ci.yml/badge.svg)](https://github.com/TumeloKonaite/FlipFinder/actions/workflows/ci.yml) [![Python](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/downloads/) [![Terraform](https://img.shields.io/badge/terraform-%3E%3D1.5-623CE4)](https://developer.hashicorp.com/terraform) [![License](https://img.shields.io/github/license/TumeloKonaite/FlipFinder)](https://github.com/TumeloKonaite/FlipFinder/blob/main/LICENSE)
+
 FlipFinder is a multi-agent pricing system for e-commerce deal discovery. It combines:
 - retrieval-based pricing (`FrontierAgent`)
 - custom model inference (`SpecialistAgent` on SageMaker)
