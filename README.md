@@ -2,67 +2,91 @@
 
 [![CI](https://github.com/TumeloKonaite/FlipFinder/actions/workflows/ci.yml/badge.svg)](https://github.com/TumeloKonaite/FlipFinder/actions/workflows/ci.yml) [![Python](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/downloads/) [![Terraform](https://img.shields.io/badge/terraform-%3E%3D1.5-623CE4)](https://developer.hashicorp.com/terraform) [![License](https://img.shields.io/github/license/TumeloKonaite/FlipFinder)](https://github.com/TumeloKonaite/FlipFinder/blob/main/LICENSE)
 
-FlipFinder is a multi-agent pricing system for e-commerce deal discovery. It combines:
-- retrieval-based pricing (`FrontierAgent`)
-- custom model inference (`SpecialistAgent` on SageMaker)
-- classical neural network inference (`NNAgent` in Lambda container)
-- orchestration (`EnsembleAgent` and `PlanningAgent`)
-- deal scanning (`ScannerAgent`)
+FlipFinder is a multi-agent pricing system for e-commerce deal discovery. It combines retrieval-based pricing, fine-tuned model inference, neural-network pricing, and orchestration agents into a deployable AWS-based platform for identifying potentially profitable listings.
 
-The infrastructure is deployed with Terraform. The top-level deployment path is:
+## What FlipFinder Does
+
+FlipFinder scans candidate listings, estimates fair value using multiple pricing strategies, and flags promising opportunities.
+
+It combines:
+- **FrontierAgent** for retrieval-based pricing
+- **SpecialistAgent** for fine-tuned model inference on SageMaker
+- **NNAgent** for classical neural-network inference in a Lambda container
+- **EnsembleAgent** for weighted price aggregation
+- **ScannerAgent** for deal discovery
+- **PlanningAgent** for orchestration, thresholding, and alerting
+
+Infrastructure is deployed with Terraform from:
+
 - `src/terraform/Platform`
-
-This README is optimized for the flow:
-1. clone repo
-2. add API keys / model settings
-3. run `terraform apply` from `Platform`
 
 ## Architecture
 
-Core runtime components:
-- `EmbeddingEndpoint` (SageMaker serverless): sentence embeddings
-- `SpecialistAgent` (SageMaker realtime + Lambda wrapper): fine-tuned model pricing
-- `NNAgent` (Lambda container): local PyTorch model pricing
-- `FrontierAgent` (Lambda): embedding + S3 Vectors retrieval + OpenAI pricing
-- `EnsembleAgent` (Lambda): weighted combination of Frontier/Specialist/NN
-- `ScannerAgent` (Lambda + EventBridge + DynamoDB): periodic deal scan
-- `PlanningAgent` (Lambda + SNS): orchestrates scanning/pricing/alerting
+![FlipFinder Architecture](docs/Architecture.png)
 
-High-level request path:
-1. Scanner finds candidate deals
-2. Ensemble preprocesses and fans out to Frontier/Specialist/NN
-3. Ensemble returns weighted price
-4. Planning applies threshold logic and sends SNS alerts
+### Core Runtime Components
+
+- **EmbeddingEndpoint** - SageMaker serverless endpoint for sentence embeddings
+- **SpecialistAgent** - SageMaker realtime endpoint with Lambda wrapper for fine-tuned pricing
+- **NNAgent** - Lambda container running a local PyTorch pricing model
+- **FrontierAgent** - Lambda function using embeddings, S3 Vectors retrieval, and OpenAI pricing
+- **EnsembleAgent** - Lambda function combining Frontier, Specialist, and NN outputs
+- **ScannerAgent** - Lambda + EventBridge + DynamoDB workflow for periodic deal scans
+- **PlanningAgent** - Lambda + SNS orchestration for pricing decisions and notifications
+
+### High-Level Flow
+
+1. `ScannerAgent` finds candidate deals
+2. `EnsembleAgent` preprocesses the listing and fans out to Frontier, Specialist, and NN
+3. `EnsembleAgent` returns a weighted price estimate
+4. `PlanningAgent` applies business rules and sends alerts through SNS
 
 ## Repository Layout
 
-Top-level directories:
-- `src/agents/` agent implementations
-- `src/terraform/` Terraform modules
-- `src/dataset_ingestion/` product ingestion scripts for S3 + S3 Vectors
-- `docs/` deployment guides per component
-- `scripts/` operational utilities (for example smoke tests)
-- `notebooks/` experimentation and data prep notebooks
+```text
+src/
+  agents/              Agent implementations
+  terraform/           Terraform modules
+  dataset_ingestion/   Product ingestion scripts for S3 + S3 Vectors
 
-Most important Terraform path:
+docs/                  Deployment and component guides
+scripts/               Operational utilities and smoke tests
+notebooks/             Experiments and data preparation
+```
+
+Main deployment path:
+
 - `src/terraform/Platform`
 
 ## Prerequisites
 
-Required:
-- AWS account + credentials configured in CLI
+### Required
+
+- AWS account with CLI credentials configured
 - Terraform `>= 1.5`
 - Docker with buildx
 - Python `>= 3.12`
-- AWS IAM permissions for Lambda, ECR, SageMaker, IAM, CloudWatch, EventBridge, DynamoDB, SNS, Bedrock, S3 Vectors
+- IAM permissions for:
+  - Lambda
+  - ECR
+  - SageMaker
+  - IAM
+  - CloudWatch
+  - EventBridge
+  - DynamoDB
+  - SNS
+  - Bedrock
+  - S3 Vectors
 
-Recommended local tools:
-- `uv` (optional) or `pip`
-- GitHub Actions is already configured with `.github/workflows/ci.yml`
+### Recommended
 
-Notes:
-- Terraform packaging/build scripts are currently Windows-oriented (`cmd`/PowerShell for `local-exec`).
-- NN model weights are downloaded during Docker build from Google Drive (configurable variable).
+- `uv` for local Python environment management
+- GitHub Actions for CI (already configured in `.github/workflows/ci.yml`)
+
+### Notes
+
+- Terraform build/package steps are currently Windows-oriented (`cmd` / PowerShell via `local-exec`)
+- NN model weights are downloaded during Docker build from Google Drive and can be overridden via Terraform variables
 
 ## Quick Start (Local Python)
 
@@ -79,9 +103,9 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## Deploy Full Stack with Terraform Platform
+## Deploy the Full Stack
 
-### 1. Open Platform module
+### 1. Open the Platform module
 
 ```bash
 cd src/terraform/Platform
@@ -89,13 +113,13 @@ cd src/terraform/Platform
 
 ### 2. Create `terraform.tfvars`
 
-Copy the example:
+Command Prompt:
 
 ```bash
 copy terraform.tfvars.example terraform.tfvars
 ```
 
-PowerShell alternative:
+PowerShell:
 
 ```powershell
 Copy-Item terraform.tfvars.example terraform.tfvars
@@ -103,34 +127,37 @@ Copy-Item terraform.tfvars.example terraform.tfvars
 
 ### 3. Set required values
 
-At minimum set:
-- `specialist_finetuned_model` (required, no default)
-- OpenAI credential strategy:
+At minimum, set:
+
+- `specialist_finetuned_model`
+- one OpenAI credential strategy:
   - `openai_api_key`, or
   - `openai_api_key_secret_arn`, or
   - `openai_api_key_ssm_parameter_name`
-- `huggingface_api_token` if base/fine-tuned model repos are gated
 
-Important defaults in example:
-- `nn_weights_drive_folder_url` points to your Google Drive Folder
+Optional but commonly needed:
+
+- `huggingface_api_token` if model repositories are gated
+- `nn_weights_drive_folder_url` for NN image builds
+- `frontier_vector_bucket` and `frontier_index_name` if you already have an ingested vector index
+
+Important example defaults:
+
 - `auto_build_container_images = true`
+- `nn_weights_drive_folder_url` points to a Google Drive folder
 
-If you already have a populated vector index, set:
-- `frontier_vector_bucket`
-- `frontier_index_name`
-
-Configuration checklist:
+### Configuration Checklist
 
 | Variable | Required for `terraform apply` | Required for working runtime | Notes |
-|---|---|---|---|
-| `specialist_finetuned_model` | Yes | Yes | No default; apply fails without it |
-| `openai_api_key` or `openai_api_key_secret_arn` or `openai_api_key_ssm_parameter_name` | No | Yes (Frontier/Scanner) | Prefer secret ARN or SSM over plain key |
-| `huggingface_api_token` | No | Sometimes | Needed when base/fine-tuned repos are gated |
-| `nn_weights_drive_folder_url` | No (default provided) | Yes (NN image build) | Folder must be accessible and contain a `.pth` file |
-| `frontier_vector_bucket` / `frontier_index_name` | No (defaults exist) | Yes (Frontier quality) | Must point to populated S3 Vectors index |
-| `messaging_email_endpoint` | No | Optional | If set, confirm SNS email subscription |
+| --- | --- | --- | --- |
+| `specialist_finetuned_model` | Yes | Yes | No default |
+| `openai_api_key` or `openai_api_key_secret_arn` or `openai_api_key_ssm_parameter_name` | No | Yes | Needed by Frontier/Scanner |
+| `huggingface_api_token` | No | Sometimes | Needed for gated model repos |
+| `nn_weights_drive_folder_url` | No | Yes | Must contain a `.pth` model file |
+| `frontier_vector_bucket` / `frontier_index_name` | No | Yes | Should point to a populated S3 Vectors index |
+| `messaging_email_endpoint` | No | Optional | Requires SNS email confirmation |
 
-Minimal `terraform.tfvars` example:
+### Minimal `terraform.tfvars` example
 
 ```hcl
 aws_region     = "us-east-1"
@@ -138,7 +165,7 @@ project_prefix = "pricing"
 
 specialist_finetuned_model = "TumeloKonaite/<your-price-model-repo>"
 
-# Choose ONE OpenAI strategy:
+# Choose ONE OpenAI strategy
 openai_api_key                    = ""
 openai_api_key_secret_arn         = "arn:aws:secretsmanager:us-east-1:123456789012:secret:openai-key"
 openai_api_key_ssm_parameter_name = ""
@@ -154,50 +181,56 @@ terraform init
 terraform apply
 ```
 
-This single apply wires all modules:
-- Embedding endpoint
-- NN, Specialist, Frontier, Ensemble, Scanner, Planning
+This provisions the full platform, including:
+
+- embedding endpoint
+- specialist agent
+- NN agent
+- frontier agent
+- ensemble agent
+- scanner agent
+- planning agent
 
 ### 5. Capture outputs
-
-After apply:
 
 ```bash
 terraform output
 ```
 
-Use outputs for Lambda names, embedding endpoint name, SNS topic, etc.
+Use the outputs for Lambda names, endpoint names, SNS topic ARNs, and related runtime values.
 
 ## Secrets and Safety
 
-This repo is configured to avoid committing local secrets/state:
+This repository is configured to avoid committing local secrets and generated state:
+
 - `.env` and `.env.*` ignored
-- `*.tfvars` ignored (except `*.tfvars.example`)
+- `*.tfvars` ignored except `*.tfvars.example`
 - `*.tfstate*` ignored
-- generated lambda zips/build folders ignored
+- generated Lambda zip/build artifacts ignored
 
-Do not store real secrets in tracked files. Use:
-- AWS Secrets Manager (`openai_api_key_secret_arn`) or
-- SSM SecureString (`openai_api_key_ssm_parameter_name`)
+Do not store real secrets in tracked files.
 
-## Post-Deploy Steps (Important)
+Preferred secret strategies:
 
-`terraform apply` builds infra, but a fully working system also needs:
+- AWS Secrets Manager via `openai_api_key_secret_arn`
+- AWS SSM SecureString via `openai_api_key_ssm_parameter_name`
 
-1. **S3 Vectors ingestion**
+## Post-Deploy Steps
+
+`terraform apply` provisions infrastructure, but a working runtime also requires the following:
+
+1. **Populate S3 Vectors**
    - Follow [docs/DataIngestion.md](docs/DataIngestion.md)
-   - Ensure `frontier_vector_bucket` and `frontier_index_name` match ingested targets
-
-2. **SNS email confirmation**
-   - If `messaging_email_endpoint` is set, confirm subscription from inbox
-
-3. **Model/runtime verification**
-   - Specialist endpoint can take time to warm up
-   - Ensure OpenAI and HF credentials are valid
+   - Ensure `frontier_vector_bucket` and `frontier_index_name` match the ingested targets
+2. **Confirm SNS subscription**
+   - If `messaging_email_endpoint` is set, confirm the email subscription from your inbox
+3. **Verify model runtime readiness**
+   - SageMaker endpoints may take time to warm up
+   - Confirm OpenAI and Hugging Face credentials are valid
 
 ## Smoke Test
 
-Run the Lambda smoke test after deploy:
+Run the smoke test after deployment:
 
 ```bash
 python scripts/smoke_test_agents.py --region us-east-1
@@ -213,7 +246,7 @@ python scripts/smoke_test_agents.py ^
   --ensemble pricing-ensemble-orchestrator
 ```
 
-The script prints a JSON summary including status and latency for each agent.
+The script returns a JSON summary with status and latency for each agent.
 
 ## Detailed Component Docs
 
@@ -225,24 +258,27 @@ The script prints a JSON summary including status and latency for each agent.
 - [docs/ScannerAgent.md](docs/ScannerAgent.md)
 - [docs/PlanningAgent.md](docs/PlanningAgent.md)
 - [docs/DataIngestion.md](docs/DataIngestion.md)
-- [docs/MessangingAgent.md](docs/MessangingAgent.md)
+- [docs/MessagingAgent.md](docs/MessagingAgent.md)
 
 ## Common Failure Points
 
-- Docker build fails:
-  - ensure Docker Desktop/buildx is available
-  - verify network can access base images and Google Drive weights URL
+### Docker build fails
 
-- Terraform apply succeeds but runtime fails:
-  - missing OpenAI credentials
-  - missing SNS subscription confirmation
-  - empty/mismatched S3 Vectors index for Frontier
+- Ensure Docker Desktop and buildx are installed
+- Confirm network access to container base images and Google Drive model weights
 
-- Specialist inference errors:
-  - verify base + fine-tuned model compatibility
-  - verify HF token access if repos are gated
+### Terraform apply succeeds but runtime fails
 
-## Destroy / Cleanup
+- Missing OpenAI credentials
+- SNS email subscription not confirmed
+- Empty or mismatched S3 Vectors index
+
+### Specialist inference errors
+
+- Base model and fine-tuned adapter are incompatible
+- Hugging Face token lacks access to gated repositories
+
+## Cleanup
 
 From `src/terraform/Platform`:
 
@@ -250,7 +286,7 @@ From `src/terraform/Platform`:
 terraform destroy
 ```
 
-If buckets/endpoints/images are protected or in use, resolve those dependencies first.
+If some buckets, images, or endpoints are still in use or protected, remove those dependencies first.
 
 ## License
 
